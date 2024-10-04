@@ -2,21 +2,37 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import { ClipboardDocumentIcon, QrCodeIcon } from '@heroicons/react/24/outline';
-import QRCode from 'qrcode.react';
+import axios from 'axios';
 
 const UrlShortener = () => {
   const [url, setUrl] = useState('');
   const [customSlug, setCustomSlug] = useState('');
   const [shortUrl, setShortUrl] = useState('');
+  const [qrCode, setQrCode] = useState('');
   const [showQR, setShowQR] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // TODO: Implement API call
-    const baseUrl = 'https://mini-url/';
-    const generatedSlug = customSlug || Math.random().toString(36).substr(2, 6);
-    setShortUrl(baseUrl + generatedSlug);
-    toast.success('URL shortened successfully!');
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError('');
+    try {
+      const response = await axios.post('http://localhost:5000/api/urls/shorten', {
+        originalUrl: url,
+        customSlug
+      });
+      setShortUrl(response.data.shortUrl);
+      setQrCode(response.data.qrCode);
+      toast.success('URL shortened successfully!');
+    } catch (error) {
+      console.error('Error shortening URL:', error.response?.data || error.message);
+      if (error.response?.data?.message) {
+        setError(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else {
+        setError('Failed to shorten URL');
+        toast.error('Failed to shorten URL');
+      }
+    }
   };
 
   const copyToClipboard = () => {
@@ -59,7 +75,7 @@ const UrlShortener = () => {
               https://mini-url/
             </span>
             <input
-              className="rounded-none rounded-r-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="rounded-none rounded-r-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               type="text"
               id="customSlug"
               placeholder="custom-name"
@@ -79,6 +95,11 @@ const UrlShortener = () => {
           </motion.button>
         </div>
       </form>
+      {error && (
+        <div className="bg-red-200 text-red-800 px-4 py-3 rounded-lg mb-4">
+          {error}
+        </div>
+      )}
       {shortUrl && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -87,31 +108,20 @@ const UrlShortener = () => {
         >
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2">
-              <strong className="font-bold">Shortened URL:</strong>
-              <span className="text-primary">{shortUrl}</span>
-            </div>
-            <div className="flex space-x-2">
-              <button
+              <a href={shortUrl} target="_blank" rel="noopener noreferrer" className="text-primary text-lg font-semibold">
+                {shortUrl}
+              </a>
+              <ClipboardDocumentIcon
+                className="h-6 w-6 text-primary cursor-pointer"
                 onClick={copyToClipboard}
-                className="text-primary hover:text-primary-light transition-colors duration-200"
-                title="Copy to clipboard"
-              >
-                <ClipboardDocumentIcon className="h-5 w-5" />
-              </button>
-              <button
-                onClick={toggleQRCode}
-                className="text-primary hover:text-primary-light transition-colors duration-200"
-                title="Generate QR Code"
-              >
-                <QrCodeIcon className="h-5 w-5" />
-              </button>
+              />
             </div>
+            <QrCodeIcon
+              className="h-6 w-6 text-primary cursor-pointer"
+              onClick={toggleQRCode}
+            />
           </div>
-          {showQR && (
-            <div className="mt-4 flex justify-center">
-              <QRCode value={shortUrl} size={128} bgColor="#1E1E1E" fgColor="#6C63FF" level="L" />
-            </div>
-          )}
+          {showQR && qrCode && <img src={qrCode} alt="QR Code" className="w-32 h-32" />}
         </motion.div>
       )}
       <Toaster />
@@ -120,3 +130,4 @@ const UrlShortener = () => {
 };
 
 export default UrlShortener;
+

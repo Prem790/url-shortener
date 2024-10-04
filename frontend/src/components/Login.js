@@ -1,22 +1,44 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { signInWithEmailAndPassword  , updateProfile} from "firebase/auth";
+import { auth } from "../firebase";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const navigae = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // TODO: Implement API call for login
-    toast.success('Login successful!');
+   
+
+    try {
+      const result = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      await updateProfile(result.user,{
+        displayName: formData.name
+      })
+      console.log(result);
+      toast.success(`Log In successful!. Welcome ${formData.name}`);
+      navigae("/");
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error("Login failed: " + error.message);
+
+    }
   };
 
   return (
@@ -26,10 +48,18 @@ const Login = () => {
       transition={{ duration: 0.5 }}
       className="max-w-md mx-auto mt-10"
     >
-      <form onSubmit={handleSubmit} className="bg-surface shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-2xl font-bold mb-6 text-center text-primary">Login</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-surface shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center text-primary">
+          Login
+        </h2>
         <div className="mb-4">
-          <label className="block text-text text-sm font-bold mb-2" htmlFor="email">
+          <label
+            className="block text-text text-sm font-bold mb-2"
+            htmlFor="email"
+          >
             Email
           </label>
           <input
@@ -44,7 +74,10 @@ const Login = () => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-text text-sm font-bold mb-2" htmlFor="password">
+          <label
+            className="block text-text text-sm font-bold mb-2"
+            htmlFor="password"
+          >
             Password
           </label>
           <input
@@ -67,7 +100,10 @@ const Login = () => {
           >
             Login
           </motion.button>
-          <Link to="/register" className="inline-block align-baseline font-bold text-sm text-primary hover:text-opacity-80 ml-9">
+          <Link
+            to="/register"
+            className="inline-block align-baseline font-bold text-sm text-primary hover:text-opacity-80 ml-9"
+          >
             Don't have an account?
           </Link>
         </div>

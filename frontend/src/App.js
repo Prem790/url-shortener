@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Header from './components/Header';
 import UrlShortener from './components/UrlShortener';
@@ -12,6 +13,7 @@ import YTVideoDownloader from './components/YTVideoDownloader';
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <div className="flex flex-col min-h-screen bg-background">
         <Header />
@@ -42,6 +44,7 @@ function App() {
         <Footer />
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 

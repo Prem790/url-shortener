@@ -14,21 +14,33 @@ const YTVideoDownloader = () => {
       // TODO: Replace with actual API call
       const response = await fetch(`https://youtube.com/oembed?url=${url}&format=json`);
       const data = await response.json();
-      setVideoInfo({
-        title: data.title,
-        thumbnail: data.thumbnail_url,
-        qualities: ['144p', '360p', '720p', '1080p'], // Mock qualities
-      });
+      // After fetching videoInfo in the handleSubmit function
+setVideoInfo({
+  title: data.title,
+  thumbnail: data.thumbnail_url,
+  qualities: ['240p', '360p', '720p', '1080p'], // Replace with actual qualities from backend response
+});
+
     } catch (error) {
       toast.error('Failed to fetch video information');
     }
     setLoading(false);
   };
 
+  /*
+
   const handleDownload = (quality) => {
     // TODO: Implement actual download logic
     toast.success(`Downloading ${videoInfo.title} in ${quality}`);
   };
+
+  */
+
+  const handleDownload = (quality) => {
+    const downloadUrl = `http://localhost:5000/api/youtube/download?url=${encodeURIComponent(url)}&quality=${quality}`;
+    window.open(downloadUrl);
+  };
+  
 
   return (
     <motion.div
