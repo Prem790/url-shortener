@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-  origin: 'https://clip-link15.netlify.app/', // Replace with your frontend URL
+  origin: 'https://url-shortener-frontend-tvo9.onrender.com', // Replace with your frontend URL
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
