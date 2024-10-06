@@ -15,7 +15,7 @@ const YTVideoDownloader = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/youtube/info",
+        "https://url-shortener-backend-pxqk.onrender.com/api/youtube/info",
         {
           params: { url },
         }
@@ -35,7 +35,7 @@ const YTVideoDownloader = () => {
       const downloadToast = toast.loading('Preparing download...');
       
       const response = await axios({
-        url: 'http://localhost:5000/api/youtube/download',
+        url: 'https://url-shortener-backend-pxqk.onrender.com/api/youtube/download',
         method: 'GET',
         responseType: 'blob', // Important for handling the video file
         timeout: 300000, // 5 minute timeout

@@ -16,7 +16,7 @@ const UrlShortener = () => {
     event.preventDefault();
     setError('');
     try {
-      const response = await axios.post('http://localhost:5000/api/urls/shorten', {
+      const response = await axios.post('https://url-shortener-backend-pxqk.onrender.com/api/urls/shorten', {
         originalUrl: url,
         customSlug
       });
