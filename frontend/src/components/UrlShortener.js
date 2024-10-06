@@ -1,46 +1,43 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import toast, { Toaster } from "react-hot-toast";
-import { ClipboardDocumentIcon, QrCodeIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import toast, { Toaster } from 'react-hot-toast';
+import { ClipboardDocumentIcon, QrCodeIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
 
 const UrlShortener = () => {
-  const [url, setUrl] = useState("");
-  const [customSlug, setCustomSlug] = useState("");
-  const [shortUrl, setShortUrl] = useState("");
-  const [qrCode, setQrCode] = useState("");
+  const [url, setUrl] = useState('');
+  const [customSlug, setCustomSlug] = useState('');
+  const [shortUrl, setShortUrl] = useState('');
+  const [qrCode, setQrCode] = useState('');
   const [showQR, setShowQR] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError("");
+    setError('');
     try {
-      const response = await axios.post("https://mini-url/api/urls/shorten", {
+      const response = await axios.post('http://localhost:5000/api/urls/shorten', {
         originalUrl: url,
-        customSlug,
+        customSlug
       });
       setShortUrl(response.data.shortUrl);
       setQrCode(response.data.qrCode);
-      toast.success("URL shortened successfully!");
+      toast.success('URL shortened successfully!');
     } catch (error) {
-      console.error(
-        "Error shortening URL:",
-        error.response?.data || error.message
-      );
+      console.error('Error shortening URL:', error.response?.data || error.message);
       if (error.response?.data?.message) {
         setError(error.response.data.message);
         toast.error(error.response.data.message);
       } else {
-        setError("Failed to shorten URL");
-        toast.error("Failed to shorten URL");
+        setError('Failed to shorten URL');
+        toast.error('Failed to shorten URL');
       }
     }
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shortUrl);
-    toast.success("Copied to clipboard!");
+    toast.success('Copied to clipboard!');
   };
 
   const toggleQRCode = () => {
@@ -54,15 +51,9 @@ const UrlShortener = () => {
       transition={{ duration: 0.5 }}
       className="max-w-md mx-auto mt-10 px-4 sm:px-0"
     >
-      <form
-        onSubmit={handleSubmit}
-        className="bg-surface shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4"
-      >
+      <form onSubmit={handleSubmit} className="bg-surface shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
-          <label
-            className="block text-text text-sm font-bold mb-2"
-            htmlFor="url"
-          >
+          <label className="block text-text text-sm font-bold mb-2" htmlFor="url">
             URL to shorten
           </label>
           <input
@@ -76,10 +67,7 @@ const UrlShortener = () => {
           />
         </div>
         <div className="mb-6">
-          <label
-            className="block text-text text-sm font-bold mb-2"
-            htmlFor="customSlug"
-          >
+          <label className="block text-text text-sm font-bold mb-2" htmlFor="customSlug">
             Your Custom URL
           </label>
           <div className="flex">
@@ -120,12 +108,7 @@ const UrlShortener = () => {
         >
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2">
-              <a
-                href={shortUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary text-lg font-semibold"
-              >
+              <a href={shortUrl} target="_blank" rel="noopener noreferrer" className="text-primary text-lg font-semibold">
                 {shortUrl}
               </a>
               <ClipboardDocumentIcon
@@ -138,9 +121,7 @@ const UrlShortener = () => {
               onClick={toggleQRCode}
             />
           </div>
-          {showQR && qrCode && (
-            <img src={qrCode} alt="QR Code" className="w-32 h-32" />
-          )}
+          {showQR && qrCode && <img src={qrCode} alt="QR Code" className="w-32 h-32" />}
         </motion.div>
       )}
       <Toaster />
