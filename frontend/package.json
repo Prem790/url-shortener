@@ -8,9 +8,9 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.7.2",
+    "axios": "^1.7.7",
     "dotenv": "^16.4.5",
-    "framer-motion": "^11.3.12",
+    "framer-motion": "^11.11.1",
     "qrcode.react": "^3.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -18,7 +18,8 @@
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "ytdl-core": "^4.11.5"
   },
   "scripts": {
     "start": "react-scripts start",

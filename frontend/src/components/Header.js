@@ -36,22 +36,22 @@ const Header = () => {
       y: -20,
       transition: {
         staggerChildren: 0.05,
-        staggerDirection: -1
-      }
+        staggerDirection: -1,
+      },
     },
     open: {
       opacity: 1,
       y: 0,
       transition: {
         staggerChildren: 0.07,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
     closed: { opacity: 0, y: -10 },
-    open: { opacity: 1, y: 0 }
+    open: { opacity: 1, y: 0 },
   };
 
   return (
@@ -64,9 +64,10 @@ const Header = () => {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="text-2xl font-bold text-[#6C63FF]">
-            MINI-URL
+            ClipLink
           </Link>
           <div className="hidden md:flex space-x-6 items-center">
+            {/* YT Downloader NavLink */}
             <NavLink to="/yt-downloader">
               <svg
                 className="w-5 h-5 mr-1 inline"
@@ -78,6 +79,21 @@ const Header = () => {
               </svg>
               YT Downloader
             </NavLink>
+
+            {/* New Mini-URL NavLink with icon */}
+            <NavLink to="/mini-url">
+              <svg
+                className="w-5 h-5 mr-1 inline"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M10.828 11.172a4 4 0 010-5.656l4-4a4 4 0 015.656 5.656l-2 2a1 1 0 01-1.414-1.414l2-2a2 2 0 10-2.828-2.828l-4 4a2 2 0 002.828 2.828 1 1 0 011.414 1.414 4 4 0 01-5.656 0zM13.172 12.828a4 4 0 010 5.656l-4 4a4 4 0 11-5.656-5.656l2-2a1 1 0 111.414 1.414l-2 2a2 2 0 102.828 2.828l4-4a2 2 0 00-2.828-2.828 1 1 0 01-1.414-1.414 4 4 0 015.656 0z" />
+              </svg>
+              Mini-URL
+            </NavLink>
+
+            {/* Other NavLinks */}
             <NavLink to="/dashboard">Dashboard</NavLink>
 
             {currentUser ? (
@@ -150,6 +166,7 @@ const Header = () => {
           </div>
         </div>
 
+        {/* Mobile Menu */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -163,6 +180,9 @@ const Header = () => {
                 <NavLink to="/yt-downloader">YT Downloader</NavLink>
               </motion.div>
               <motion.div variants={itemVariants}>
+                <NavLink to="/mini-url">Mini-URL</NavLink>
+              </motion.div>
+              <motion.div variants={itemVariants}>
                 <NavLink to="/dashboard">Dashboard</NavLink>
               </motion.div>
               {!currentUser ? (
@@ -172,27 +192,19 @@ const Header = () => {
                   </motion.div>
                   <motion.div variants={itemVariants}>
                     <Link to="/register" className="inline-block">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="bg-[#6C63FF] hover:bg-opacity-90 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-300"
-                        type="submit"
-                      >
+                      <button className="w-full bg-[#6C63FF] hover:bg-opacity-90 text-white font-bold py-2 rounded transition-colors duration-300">
                         Register
-                      </motion.button>
+                      </button>
                     </Link>
                   </motion.div>
                 </>
               ) : (
-                <motion.div variants={itemVariants}>
-                  <button onClick={() => setProfileDropdown(!profileDropdown)}>
-                    <img
-                      src={currentUser.photoURL || "/default-profile.png"}
-                      alt="Profile"
-                      className="w-8 h-8 rounded-full"
-                    />
-                    {currentUser.displayName || "User"}
-                  </button>
+                <motion.div
+                  onClick={handleLogout}
+                  className="cursor-pointer bg-[#6C63FF] hover:bg-[#524bb8] text-white py-2 rounded transition-colors duration-300"
+                  variants={itemVariants}
+                >
+                  Logout
                 </motion.div>
               )}
             </motion.div>
@@ -203,12 +215,10 @@ const Header = () => {
   );
 };
 
-const NavLink = ({ children, to, mobile = false }) => (
+const NavLink = ({ to, children }) => (
   <Link
     to={to}
-    className={`text-white hover:text-[#6C63FF] transition-colors duration-300 ${
-      mobile ? "block py-2 px-4 rounded-md hover:bg-[#121212]" : ""
-    }`}
+    className="text-white hover:text-[#6C63FF] font-medium transition-colors duration-300"
   >
     {children}
   </Link>

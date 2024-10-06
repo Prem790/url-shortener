@@ -1,11 +1,8 @@
-// backend/routes/youtube.js
-
 const express = require('express');
-const { downloadVideo } = require("../controller/youtubeDownloader")
-
 const router = express.Router();
+const { getVideoInfo, downloadVideo } = require('../controller/youtubeDownloader');
 
-// Route to download YouTube video
+router.get('/info', getVideoInfo);
 router.get('/download', downloadVideo);
 
 module.exports = router;

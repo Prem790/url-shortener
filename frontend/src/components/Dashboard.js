@@ -11,7 +11,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUrls = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/urls`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/urls`); // Fixed here
         const data = await response.json();
         setUrls(data.urls);
       } catch (error) {
@@ -28,7 +28,7 @@ const Dashboard = () => {
   };
 
   const generateQRCode = (url) => {
-    window.open(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`, '_blank');
+    window.open(`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`, '_blank'); // Fixed here
   };
 
   return (

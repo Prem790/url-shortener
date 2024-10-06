@@ -11,7 +11,7 @@ const Footer = () => {
     >
       <div className="container mx-auto px-6 text-center">
         <p className="text-text text-sm">
-          © {new Date().getFullYear()} URL Shortener. All rights reserved.
+          © {new Date().getFullYear()} ClipLink. All rights reserved.
         </p>
       </div>
     </motion.footer>
