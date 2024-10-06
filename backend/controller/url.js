@@ -5,7 +5,8 @@ const QRCode = require('qrcode');
 // Shorten URL
 exports.shortenUrl = async (req, res) => {
     const { originalUrl, customSlug } = req.body;
-    const shortUrl = `http://localhost:5000/${customSlug}`; // Fixed here
+    const baseUrl = process.env.BASE_URL || 'https://mini-url'; // Use the custom domain
+    const shortUrl = `${baseUrl}/${customSlug}`;
   
     try {
         let url = await Url.findOne({ customSlug });

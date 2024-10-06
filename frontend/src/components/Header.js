@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "../contexts/AuthContext";
@@ -8,21 +8,25 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profileDropdown, setProfileDropdown] = useState(false);
   const { currentUser, logout } = useAuth();
-  const dropdownRef = useRef(null); // Reference to the dropdown menu
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    setProfileDropdown(false); // Close the dropdown after logout
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setProfileDropdown(false);
+      navigate('/login');
+    } catch (error) {
+      console.error("Failed to log out", error);
+    }
   };
 
-  // Function to handle clicks outside of the profile dropdown
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setProfileDropdown(false);
     }
   };
 
-  // Add event listener for clicks outside of dropdown
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -59,7 +63,7 @@ const Header = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 120 }}
-      className="bg-[#1E1E1E] text-white shadow-md"
+      className="bg-[#1E1E1E] text-white shadow-md relative z-10"
     >
       <nav className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
@@ -67,7 +71,6 @@ const Header = () => {
             ClipLink
           </Link>
           <div className="hidden md:flex space-x-6 items-center">
-            {/* YT Downloader NavLink */}
             <NavLink to="/yt-downloader">
               <svg
                 className="w-5 h-5 mr-1 inline"
@@ -79,8 +82,6 @@ const Header = () => {
               </svg>
               YT Downloader
             </NavLink>
-
-            {/* New Mini-URL NavLink with icon */}
             <NavLink to="/mini-url">
               <svg
                 className="w-5 h-5 mr-1 inline"
@@ -92,8 +93,6 @@ const Header = () => {
               </svg>
               Mini-URL
             </NavLink>
-
-            {/* Other NavLinks */}
             <NavLink to="/dashboard">Dashboard</NavLink>
 
             {currentUser ? (
@@ -116,23 +115,43 @@ const Header = () => {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="absolute right-0 mt-2 w-48 bg-[#2B2B2B] text-white shadow-lg rounded-lg"
+                      className="absolute right-0 mt-2 w-48 bg-[#2B2B2B] text-white shadow-lg rounded-lg z-50"
                     >
                       <ul>
-                        <li className="py-2 px-4 hover:bg-[#3B3B3B]">
-                          <Link to="/profile">View Profile</Link>
+                        <li>
+                          <Link 
+                            to="/profile" 
+                            className="block py-2 px-4 hover:bg-[#3B3B3B] cursor-pointer"
+                            onClick={() => setProfileDropdown(false)}
+                          >
+                            View Profile
+                          </Link>
                         </li>
-                        <li className="py-2 px-4 hover:bg-[#3B3B3B]">
-                          <Link to="/account-settings">Account Settings</Link>
+                        <li>
+                          <Link 
+                            to="/account-settings" 
+                            className="block py-2 px-4 hover:bg-[#3B3B3B] cursor-pointer"
+                            onClick={() => setProfileDropdown(false)}
+                          >
+                            Account Settings
+                          </Link>
                         </li>
-                        <li className="py-2 px-4 hover:bg-[#3B3B3B]">
-                          <Link to="/edit-profile">Edit Profile</Link>
+                        <li>
+                          <Link 
+                            to="/edit-profile" 
+                            className="block py-2 px-4 hover:bg-[#3B3B3B] cursor-pointer"
+                            onClick={() => setProfileDropdown(false)}
+                          >
+                            Edit Profile
+                          </Link>
                         </li>
-                        <li
-                          onClick={handleLogout}
-                          className="py-2 px-4 cursor-pointer bg-[#6C63FF] hover:bg-[#524bb8] rounded-b-lg transition-all duration-200"
-                        >
-                          Logout
+                        <li>
+                          <button
+                            onClick={handleLogout}
+                            className="w-full text-left py-2 px-4 cursor-pointer bg-[#6C63FF] hover:bg-[#524bb8] rounded-b-lg transition-all duration-200"
+                          >
+                            Logout
+                          </button>
                         </li>
                       </ul>
                     </motion.div>
@@ -166,7 +185,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -199,12 +217,13 @@ const Header = () => {
                   </motion.div>
                 </>
               ) : (
-                <motion.div
-                  onClick={handleLogout}
-                  className="cursor-pointer bg-[#6C63FF] hover:bg-[#524bb8] text-white py-2 rounded transition-colors duration-300"
-                  variants={itemVariants}
-                >
-                  Logout
+                <motion.div variants={itemVariants}>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left bg-[#6C63FF] hover:bg-[#524bb8] text-white py-2 px-4 rounded transition-colors duration-300"
+                  >
+                    Logout
+                  </button>
                 </motion.div>
               )}
             </motion.div>
