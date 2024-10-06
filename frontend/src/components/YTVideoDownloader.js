@@ -45,8 +45,8 @@ const YTVideoDownloader = () => {
         }
       });
 
-      const contentType = response.headers['content-type'];
-      const extension = contentType.includes('video/mp4') ? 'mp4' : 'webm';
+     // const contentType = response.headers['content-type'];
+      //const extension = contentType.includes('video/mp4') ? 'mp4' : 'webm';
       
       const blob = new Blob([response.data], { 
         type: response.headers['content-type'] 

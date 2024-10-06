@@ -7,7 +7,7 @@ import {
   ChartBarSquareIcon, 
   UserPlusIcon, 
   PencilSquareIcon, 
-  CursorArrowRaysIcon 
+  
 } from '@heroicons/react/24/outline';
 
 const HomePage = () => {

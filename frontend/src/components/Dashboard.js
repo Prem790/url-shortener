@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 import { ClipboardDocumentIcon, QrCodeIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
