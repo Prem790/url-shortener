@@ -104,8 +104,9 @@ ClipLink is a comprehensive web application that combines two powerful features:
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/cliplink.git
-cd cliplink
+https://github.com/Prem790/url-shortener.git
+cd frontend
+cd backend
 ```
 
 2. **Set up environment variables**
@@ -210,7 +211,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📞 Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
+Prem Jadwani -  jadwaniprem12@gmail.com
 
 Project Link: [https://github.com/yourusername/cliplink](https://github.com/yourusername/cliplink)
 
