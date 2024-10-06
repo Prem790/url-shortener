@@ -20,8 +20,10 @@ const YTVideoDownloader = () => {
           params: { url },
         }
       );
+
       setVideoInfo(response.data);
     } catch (error) {
+      // Improved error handling
       const errorMessage = error.response?.data?.message || "Failed to fetch video information";
       toast.error(errorMessage);
       console.error("Error details:", error);
@@ -33,47 +35,42 @@ const YTVideoDownloader = () => {
   const handleDownload = async (itag) => {
     try {
       const downloadToast = toast.loading('Preparing download...');
-      
+
       const response = await axios({
         url: 'https://url-shortener-backend-pxqk.onrender.com/api/youtube/download',
         method: 'GET',
         responseType: 'blob', // Important for handling the video file
-        timeout: 300000, // 5 minute timeout
         params: {
           url,
-          itag
-        }
+          itag,
+        },
       });
 
-     // const contentType = response.headers['content-type'];
-      //const extension = contentType.includes('video/mp4') ? 'mp4' : 'webm';
-      
       const blob = new Blob([response.data], { 
         type: response.headers['content-type'] 
       });
       const downloadUrl = window.URL.createObjectURL(blob);
-      
+
       // Create a temporary anchor element and trigger the download
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = `video-${Date.now()}.mp4`; // You can customize the filename
       document.body.appendChild(link);
       link.click();
-      
+
       // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(downloadUrl);
-      
+
       toast.dismiss(downloadToast);
       toast.success('Download started!');
     } catch (error) {
       toast.dismiss();
-      toast.error(error.response?.data?.message || 'Download failed. Please try again.');
+      const errorMessage = error.response?.data?.message || 'Download failed. Please try again.';
+      toast.error(errorMessage);
       console.error('Download error:', error);
     }
   };
-
-
 
   return (
     <motion.div
