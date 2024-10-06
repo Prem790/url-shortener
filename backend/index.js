@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-  origin: 'http://localhost:3000', // Replace with your frontend URL
+  origin: 'https://clip-link15.netlify.app/', // Replace with your frontend URL
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
