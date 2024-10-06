@@ -1,5 +1,4 @@
 const Url = require('../models/url');
-const crypto = require('crypto');
 const QRCode = require('qrcode');
 
 // Shorten URL
@@ -22,6 +21,7 @@ exports.shortenUrl = async (req, res) => {
         await url.save();
         res.status(201).json({ shortUrl, qrCode: await QRCode.toDataURL(shortUrl) });
     } catch (error) {
+        console.error('Error while shortening URL:', error); // Added console for debugging
         res.status(500).json({ message: 'Failed to shorten URL', error: error.message });
     }
 };
@@ -44,6 +44,7 @@ exports.redirectUrl = async (req, res) => {
         // Redirect to the original URL
         res.redirect(url.originalUrl);
     } catch (error) {
+        console.error('Error during redirect:', error); // Added console for debugging
         res.status(500).json({ error: error.message });
     }
 };
@@ -54,6 +55,7 @@ exports.getVisitHistory = async (req, res) => {
         const urls = await Url.find({}, 'shortUrl visitCount visitHistory');
         res.json(urls);
     } catch (error) {
+        console.error('Error fetching visit history:', error); // Added console for debugging
         res.status(500).json({ error: error.message });
     }
 };

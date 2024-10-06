@@ -26,9 +26,10 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-  origin: 'https://url-shortener-frontend-tvo9.onrender.com', // Replace with your frontend URL
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
+  origin: ['https://url-shortener-frontend-tvo9.onrender.com', 'http://localhost:3000'], // Add both frontend URLs
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Allow credentials
 }));
 
 app.use(express.json({ limit: '50mb' }));
